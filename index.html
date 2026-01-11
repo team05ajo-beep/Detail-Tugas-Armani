@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giorgio Armani - Task Management</title>
+    <title>Giorgio Armani - Task Management System</title>
+    <meta name="description" content="Sistem Manajemen Tugas Premium Giorgio Armani">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -13,23 +14,33 @@
             background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%);
             background-attachment: fixed;
             color: #1a1a1a;
+            margin: 0;
+            padding: 0;
         }
         .armani-font {
             font-family: 'Bodoni Moda', serif;
             letter-spacing: -0.02em;
         }
         .armani-bg-deep {
-            background-color: #0f172a; /* Deep charcoal/navy for contrast */
+            background-color: #0f172a;
             border: 1px solid rgba(255,255,255,0.1);
         }
         .armani-border {
             border-color: #94a3b8;
         }
         .armani-accent {
-            color: #f1f5f9; /* Bright accent */
+            color: #f1f5f9;
         }
-        .text-glow {
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #cbd5e1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 4px;
         }
         @media print {
             .no-print {
@@ -39,23 +50,22 @@
                 background: white !important;
                 color: black !important;
             }
-            .armani-bg-deep {
-                background-color: #1a1c22 !important;
-                color: white !important;
-            }
         }
     </style>
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>
