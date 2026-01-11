@@ -4,46 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giorgio Armani - Task Management System</title>
-    <meta name="description" content="Sistem Manajemen Tugas Premium Giorgio Armani">
+    <title>Giorgio Armani - Corporate Task Management</title>
+    <meta name="description" content="Official Giorgio Armani Task Verification System">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Bodoni+Moda:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --armani-gold: #c5a059;
+            --armani-slate: #1a1a1a;
+        }
         body {
-            font-family: 'Public Sans', sans-serif;
-            background: #d1d5db; /* Lighter base gray */
-            background-image: linear-gradient(to bottom, #e2e8f0 0%, #cbd5e1 100%);
-            background-attachment: fixed;
-            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #ffffff;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
         .armani-font {
             font-family: 'Bodoni Moda', serif;
-            letter-spacing: -0.02em;
         }
-        .armani-bg-deep {
-            background-color: #0c1222;
+        .monogram-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M40 40c0-11.046-8.954-20-20-20S0 28.954 0 40s8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .frosted-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
-        ::-webkit-scrollbar-track {
-            background: #cbd5e1;
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 99;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 8s linear infinite;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #64748b;
-            border-radius: 4px;
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100%; }
         }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
+            .no-print { display: none !important; }
+            body { background: #fff !important; color: #000 !important; }
+            .monogram-bg { background-image: none !important; }
         }
     </style>
     <script type="importmap">
@@ -59,6 +66,7 @@
 </script>
 </head>
 <body>
+    <div class="scanline no-print"></div>
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
 </body>

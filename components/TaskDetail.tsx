@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { GeneratedTask } from '../types';
 
 interface TaskDetailProps {
@@ -7,8 +7,16 @@ interface TaskDetailProps {
 }
 
 const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
-  const [zoom, setZoom] = useState(100);
-  const [isFocusMode, setIsFocusMode] = useState(false);
+  // Generate a random serial code for the contract
+  const serialCode = useMemo(() => {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let res = '';
+    for (let i = 0; i < 12; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+      if (i === 3 || i === 7) res += '-';
+    }
+    return res;
+  }, []);
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -18,213 +26,199 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
     }).format(val).replace('Rp', 'Rp ');
   };
 
-  const formatOrderType = (text: string) => {
-    return text.toUpperCase();
+  const CheckIcon = (props: { active?: boolean }) => (
+    <div className={`w-4 h-4 ${props.active ? 'bg-emerald-500' : 'bg-gray-300'} rounded-sm flex items-center justify-center mr-3 shrink-0`}>
+      <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="4">
+        <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+
+  // Helper to convert number string to Indonesian words for dynamic part
+  const numberToWords = (orderString: string) => {
+    const firstChar = orderString.trim().charAt(0);
+    const map: { [key: string]: string } = {
+      '1': 'SATU',
+      '2': 'DUA',
+      '3': 'TIGA',
+      '4': 'EMPAT',
+      '5': 'LIMA'
+    };
+    const word = map[firstChar] || 'SATU';
+    return `${word} PESANAN UNTUK ${word} PRODUK.`;
   };
 
-  const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 130));
-  const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 70));
-  
-  const toggleFocus = () => {
-    setIsFocusMode(!isFocusMode);
-    if (!isFocusMode) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
+  const dynamicOrderText = numberToWords(task.orderType);
 
   return (
-    <div className={`w-full transition-all duration-500 ${isFocusMode ? 'fixed inset-0 z-[100] bg-[#cbd5e1] overflow-hidden flex items-center justify-center p-4' : 'relative py-8'}`}>
+    <div className="w-full max-w-[1300px] bg-[#f8f8f8] text-black overflow-hidden shadow-2xl flex flex-col font-sans border border-gray-200">
       
-      {/* Floating Controls - No Print */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-[110] no-print scale-90 origin-bottom-right">
-        <div className="bg-black/90 backdrop-blur-md p-2 rounded-xl shadow-2xl flex flex-col items-center gap-2 border border-white/10">
-          <button 
-            onClick={handleZoomIn}
-            className="w-12 h-12 flex items-center justify-center text-white hover:bg-white/20 rounded-lg transition-colors font-black text-2xl"
-          >+</button>
-          <div className="text-[10px] text-white font-black py-1">{zoom}%</div>
-          <button 
-            onClick={handleZoomOut}
-            className="w-12 h-12 flex items-center justify-center text-white hover:bg-white/20 rounded-lg transition-colors font-black text-2xl"
-          >-</button>
-        </div>
-        
-        <button 
-          onClick={toggleFocus}
-          className={`px-8 py-4 rounded-xl font-black text-[11px] tracking-[0.2em] uppercase shadow-2xl transition-all border-2 ${
-            isFocusMode 
-            ? 'bg-red-600 text-white border-red-700' 
-            : 'bg-[#0f172a] text-white border-slate-700 hover:scale-105 active:scale-95'
-          }`}
-        >
-          {isFocusMode ? 'KELUAR FOKUS' : 'MODE LANDSCAPE SCREENSHOT'}
-        </button>
-
-        {isFocusMode && (
-           <button 
-           onClick={() => window.print()}
-           className="bg-emerald-600 text-white px-8 py-4 rounded-xl font-black text-[11px] tracking-[0.2em] uppercase shadow-2xl border-2 border-emerald-700 hover:scale-105 active:scale-95 transition-transform"
-         >
-           SIMPAN DOKUMEN (PDF)
-         </button>
-        )}
-      </div>
-
-      {/* Landscape Document Container */}
-      <div 
-        style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center center' }}
-        className="transition-transform duration-300 ease-in-out"
-      >
-        <div className="w-[1280px] bg-[#d1d5db] p-10 text-black font-sans select-none shadow-[0_0_50px_rgba(0,0,0,0.15)] border border-slate-300 rounded-sm">
-          
-          {/* Header Section */}
-          <div className="flex flex-col items-center mb-8">
-            <img 
-              src="https://images.seeklogo.com/logo-png/39/2/giorgio-armani-logo-png_seeklogo-393860.png" 
-              alt="Giorgio Armani" 
-              className="h-32 object-contain mb-4"
-            />
+      {/* TOP NAVIGATION BAR */}
+      <div className="bg-white border-b border-gray-100 px-10 py-6 flex flex-col items-center">
+        <div className="w-full flex justify-between items-center mb-6">
+          <div className="flex gap-4 text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase">
+            <span>+ Contact Us</span>
           </div>
-
-          {/* Navigation Bar */}
-          <div className="grid grid-cols-4 border-b-[2px] border-slate-400 mb-8 text-[14px] font-black uppercase tracking-[0.3em] text-slate-500 text-center">
-            <div className="text-black border-b-[4px] border-black pb-4 -mb-[2px]">BELUM TERKONFIRMASI</div>
-            <div className="pb-4 border-b-[2px] border-transparent">DIKONFIRMASI</div>
-            <div className="pb-4 border-b-[2px] border-transparent">WAKTU TUGAS</div>
-            <div className="pb-4 border-b-[2px] border-transparent flex items-center justify-center gap-2">
-              <span className="w-5 h-5 bg-slate-400 text-white rounded-full text-[10px] flex items-center justify-center">?</span> BANTUAN
+          <h1 className="armani-font text-5xl tracking-[0.3em] font-light uppercase">GIORGIO ARMANI</h1>
+          <div className="flex gap-6 items-center opacity-80">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M16 11V7a4 4 0 11-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+            <div className="flex flex-col gap-1.5 w-5 ml-2">
+              <div className="h-[1px] bg-black w-full"></div>
+              <div className="h-[1px] bg-black w-3/4"></div>
             </div>
           </div>
+        </div>
+        <div className="flex gap-10 text-[10px] font-semibold tracking-[0.25em] opacity-60 uppercase">
+          <span>Beranda</span>
+          <span>Produk</span>
+          <span>Pembayaran</span>
+          <span className="text-black opacity-100 border-b border-black pb-1">Detail Tugas</span>
+          <span>Tugas VIP</span>
+          <span>Status Akun</span>
+        </div>
+      </div>
 
-          {/* Task Steps */}
-          <div className="flex justify-start gap-12 mb-10 pl-4">
-            {['SATU', 'DUA', 'TIGA', 'EMPAT', 'LIMA'].map((step, idx) => (
-              <div key={idx} className="flex items-center gap-3">
-                <div className={`w-8 h-8 border-2 rounded flex items-center justify-center ${idx === 0 ? 'bg-[#15803d] border-[#14532d]' : 'bg-white border-slate-300'}`}>
-                  {idx === 0 && <span className="text-white font-black text-lg">✓</span>}
+      {/* SUB NAV */}
+      <div className="bg-[#eeeeee] px-10 py-4 flex justify-between items-center border-b border-gray-300">
+        <div className="flex gap-10 font-bold text-base tracking-tight uppercase italic">
+          <span className="text-black border-b-2 border-black">Belum Terkonfirmasi</span>
+          <span className="text-black/30">Dikonfirmasi</span>
+          <span className="text-black/30">Waktu Tugas</span>
+        </div>
+        <div className="flex items-center gap-3 font-bold text-xs tracking-widest opacity-70">
+          <div className="w-5 h-5 rounded-full border border-black flex items-center justify-center text-[10px]">?</div>
+          <span>BANTUAN</span>
+        </div>
+      </div>
+
+      {/* MAIN CONTENT AREA */}
+      <div className="bg-[#c2c2c2] p-10 grid grid-cols-12 gap-8 relative monogram-bg min-h-[600px]">
+        
+        <div className="col-span-8 flex flex-col gap-6">
+          
+          {/* TASK PROGRESSBAR */}
+          <div className="flex justify-between px-6 py-3 bg-white/30 backdrop-blur-sm rounded-full border border-white/20">
+            {['Satu', 'Dua', 'Tiga', 'Empat', 'Lima'].map((t, i) => {
+              const currentIdx = i + 1;
+              const isActive = currentIdx <= task.taskNumber;
+              return (
+                <div key={i} className={`flex items-center gap-2 font-bold text-[11px] tracking-widest italic uppercase ${currentIdx === task.taskNumber ? 'text-black' : 'text-black/40'}`}>
+                  <div className={`w-4 h-4 border border-black flex items-center justify-center ${isActive ? 'bg-emerald-500 border-emerald-500' : 'bg-white/50'}`}>
+                    {isActive && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="4"><path d="M5 13l4 4L19 7" /></svg>}
+                  </div>
+                  <span>Tugas {t}</span>
                 </div>
-                <span className={`text-[13px] font-black tracking-widest ${idx === 0 ? 'text-black' : 'text-slate-400'}`}>TUGAS {step}</span>
+              );
+            })}
+          </div>
+
+          {/* INFO GRID */}
+          <div className="grid grid-cols-2 gap-x-16 gap-y-4 px-6">
+            {[
+              { label: "ID Akun Bisnis", value: task.phoneNumber },
+              { label: "Harga Produk", value: formatCurrency(task.productPrice) },
+              { label: "Profit Komisi", value: `${task.commissionRate}%` },
+              { label: "Keuntungan", value: formatCurrency(task.profit) },
+              { label: "Status Tugas", value: "Aktif" },
+              { label: "Waktu Tugas", value: "60 Menit" }
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center justify-between border-b border-black/10 pb-2">
+                <div className="flex items-center font-bold italic text-[12px] uppercase tracking-tight text-black/70">
+                  <CheckIcon active={true} />
+                  {item.label}
+                </div>
+                <div className="font-extrabold italic text-[12px] text-black text-right uppercase">{item.value}</div>
               </div>
             ))}
           </div>
 
-          {/* Main Grid Content */}
-          <div className="grid grid-cols-12 gap-10 items-start">
+          {/* ACTION BUTTONS */}
+          <div className="flex justify-center gap-8 mt-1">
+            <button className="bg-[#1b5e20] text-white px-10 py-2.5 rounded-full font-bold italic flex items-center gap-3 shadow-xl hover:bg-[#2e7d32] transition-all uppercase text-[10px] tracking-widest">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Konfirmasi Tugas
+            </button>
+            <button className="bg-[#b71c1c] text-white px-10 py-2.5 rounded-full font-bold italic flex items-center gap-3 shadow-xl hover:bg-[#d32f2f] transition-all uppercase text-[10px] tracking-widest">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Batalkan Tugas
+            </button>
+          </div>
+
+          {/* BOTTOM TEXT BOXES (RINCIAN DETAIL TUGAS) */}
+          <div className="flex flex-col gap-4 mt-2">
+            <div className="bg-black/95 text-white py-4 px-10 rounded-[20px] border border-white/10 shadow-2xl">
+               <div className="flex items-center justify-center gap-3 mb-3">
+                 <div className="h-[1px] w-8 bg-white/20"></div>
+                 <h4 className="font-bold italic text-center tracking-[0.2em] text-[11px] uppercase">Rincian Detail Tugas</h4>
+                 <div className="h-[1px] w-8 bg-white/20"></div>
+               </div>
+               <div className="text-[12px] font-bold italic text-center leading-[1.6] tracking-tight uppercase px-4 opacity-95 flex flex-col gap-1">
+                 <p>PEKERJAAN TELAH DIMULAI, SILAKAN MASUK KE DALAM AKUN ANDA UNTUK MELANJUTKAN.</p>
+                 <p>TUGAS ANDA AKAN MENERIMA {dynamicOrderText}</p>
+                 <p>DETAIL PEKERJAAN DIKIRIMKAN SECARA OTOMATIS OLEH SISTEM.</p>
+                 <p>PENARIKAN SALDO DAPAT DILAKUKAN SETELAH SELURUH PEKERJAAN SELESAI SESUAI KETENTUAN.</p>
+               </div>
+               <div className="mt-5 pt-3 border-t border-white/5 opacity-20 text-[8px] text-center font-bold tracking-[0.4em] uppercase italic">
+                 © 2016 - 2025 Giorgio Armani S.p.A. - All rights reserved. SIAE LICENCE # 2294/I/1936
+               </div>
+            </div>
             
-            {/* Left: 8 Columns for Details */}
-            <div className="col-span-8 space-y-8">
-              
-              {/* Fields Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "ID Akun Bisnis", value: task.phoneNumber },
-                  { label: "Harga Produk", value: formatCurrency(task.productPrice) },
-                  { label: "Profit", value: task.commission },
-                  { label: "Jumlah Paket", value: "1 Paket" },
-                  { label: "Keuntungan", value: formatCurrency(task.profit) },
-                  { label: "Status Tugas", value: "Menunggu", italic: true },
-                  { label: "Waktu Tugas", value: "60 Minutes" }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center bg-white/70 border border-slate-300 p-3 rounded shadow-sm">
-                    <div className="w-7 h-7 border-2 border-[#2563eb] flex items-center justify-center mr-4 bg-white rounded-sm">
-                      <span className="text-[#2563eb] text-[14px] font-black">✓</span>
-                    </div>
-                    <div className="flex-1 flex justify-between items-center pr-2">
-                      <span className="text-[12px] font-black uppercase text-slate-700">{item.label}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-black text-slate-400">:</span>
-                        <span className={`text-[14px] font-black text-black bg-white px-4 py-2 rounded border border-slate-200 min-w-[140px] text-right ${item.italic ? 'italic' : ''}`}>
-                          {item.value}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex justify-center gap-8 py-4">
-                <button className="bg-[#064e3b] text-white px-14 py-5 rounded-md shadow-[0_6px_0_0_#022c22] flex items-center gap-4 text-[14px] font-black uppercase tracking-[0.2em]">
-                  <span className="w-7 h-7 bg-white text-[#064e3b] rounded-full flex items-center justify-center font-black">✓</span>
-                  KONFIRMASI TUGAS
-                </button>
-                <button className="bg-[#7f1d1d] text-white px-14 py-5 rounded-md shadow-[0_6px_0_0_#450a0a] flex items-center gap-4 text-[14px] font-black uppercase tracking-[0.2em]">
-                  <span className="w-7 h-7 bg-white text-[#7f1d1d] rounded-full flex items-center justify-center font-black">✕</span>
-                  BATALKAN TUGAS
-                </button>
-              </div>
-
-              {/* Info Blocks */}
-              <div className="bg-[#0f172a] p-10 text-white rounded-xl border border-white/5 relative overflow-hidden">
-                <div className="flex items-center justify-center gap-8 mb-8">
-                  <div className="h-[1px] w-24 bg-slate-700"></div>
-                  <h4 className="text-[14px] font-black tracking-[0.5em] text-slate-400">RINCIAN DETAIL TUGAS</h4>
-                  <div className="h-[1px] w-24 bg-slate-700"></div>
-                </div>
-                <p className="text-[11px] leading-relaxed font-bold text-slate-300 uppercase text-center mb-8 tracking-wider">
-                  PROTOKOL TUGAS DIMULAI: HARAP SEGERA MELAKUKAN AUTENTIKASI MASUK KE DALAM AKUN BISNIS ANDA DAN PROSES PENARIKAN SALDO KOMISI HANYA DAPAT DIAKTIFKAN SETELAH SELURUH RANGKAIAN UNIT TUGAS DINYATAKAN SELESAI OLEH SISTEM. SISTEM INTEGRASI AKAN SECARA OTOMATIS MENSINKRONISASI DAN MENGIRIMKAN SELURUH RINCIAN DETAIL TUGAS BERDASARKAN ALGORITMA AKUN BISNIS ANDA SECARA REAL-TIME TANPA JEDA!
-                </p>
-                <div className="bg-white/5 border-y border-slate-700 py-6 mb-8 text-center">
-                  <h3 className="text-[18px] font-black tracking-[0.2em] uppercase">
-                    STATUS UNIT AKTIF: {formatOrderType(task.orderType)} SESUAI DENGAN STANDARDISASI GLOBAL
-                  </h3>
-                </div>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.4em] text-center">
-                  HINDARI AKTIVITAS ILEGAL SEPERTI PENARIKAN DANA. PEMILIK AKUN HARUS MENYELESAIKAN TUGAS BERDASARKAN KODE ETIK PERUSAHAAN!
-                </p>
-              </div>
+            <div className="bg-white/90 backdrop-blur-md text-black p-5 rounded-[20px] border border-black/5 shadow-xl">
+               <div className="flex items-center justify-center gap-3 mb-2">
+                 <div className="h-[1px] w-8 bg-black/10"></div>
+                 <h4 className="font-bold italic text-center tracking-[0.2em] text-[11px] uppercase">Catatan Penting</h4>
+                 <div className="h-[1px] w-8 bg-black/10"></div>
+               </div>
+               <div className="text-[11px] font-bold italic text-center leading-relaxed tracking-normal uppercase px-4 opacity-80 flex flex-col gap-1">
+                 <p>Pemilik akun hanya perlu online dan melakukan promosi di dalam sistem Giorgio Armani melalui akun bisnis yang tersedia pada fitur Akun Bisnis.</p>
+                 <p>Seluruh proses tugas akan dijalankan secara otomatis oleh sistem.</p>
+                 <p>Apabila tugas belum diselesaikan sepenuhnya, maka penarikan saldo belum dapat dilakukan.</p>
+               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Right: 4 Columns for Sidebar */}
-            <div className="col-span-4 bg-[#020617] p-8 text-white rounded-xl shadow-2xl border border-white/10 h-full">
-              <div className="text-center mb-10">
-                <div className="armani-font text-3xl font-black mb-2 tracking-tighter">GIORGIO ARMANI</div>
-                <div className="text-[9px] tracking-[0.6em] text-slate-500 font-bold uppercase mb-8">EXCELLENCE SINCE 1975</div>
-                <div className="py-3 border-y border-white/10">
-                  <h4 className="text-[15px] font-black tracking-[0.2em]">KONTRAK & KETENTUAN</h4>
-                </div>
-              </div>
-
-              <div className="space-y-6 text-[11px] leading-relaxed">
-                {[
-                  "Detail tugas akan diberikan langsung kepada Anda setelah Anda mengaktifkan tugas.",
-                  "Keuntungan Anggota ditentukan berdasarkan pemilihan Koleksi Produk Armani.",
-                  "Setiap Tugas akan ada perubahan harga untuk meningkatkan Rating Produk Armani.",
-                  "Penarikan dana membutuhkan waktu sekitar 3-5 menit ke rekening terdaftar.",
-                  "Kerugian akibat akun terkunci secara pribadi ditanggung pemilik akun.",
-                  "Wajib memahami instruksi penarikan dana dari Advisor resmi.",
-                  "Detail Tugas yang sudah dikonfirmasi tidak dapat dibatalkan.",
-                  "Maksimal penyelesaian tugas adalah 5 kali dalam satu hari kerja."
-                ].map((text, i) => (
-                  <div key={i} className="flex gap-4">
-                    <span className="text-slate-400 font-black">{i + 1}.</span>
-                    <p className="font-bold text-slate-100 uppercase tracking-tight">{text}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-12 pt-10 border-t border-white/10 text-center">
-                <p className="text-[14px] font-black italic tracking-[0.3em] uppercase mb-1">GA INTERNATIONAL DIVISION</p>
-                <p className="text-[9px] text-slate-500 font-black tracking-widest">OFFICIAL ID: GA-2025-SEC-001</p>
-              </div>
-            </div>
-
+        {/* RIGHT COLUMN: KONTRAK & KETENTUAN */}
+        <div className="col-span-4 bg-[#0a0a0a] text-white p-8 rounded-[32px] border border-white/10 flex flex-col shadow-2xl overflow-hidden">
+          <div className="flex flex-col items-center gap-2 mb-4">
+             <h4 className="font-bold italic text-center tracking-[0.2em] text-[12px] uppercase border-b border-white/20 pb-2 w-full">Kontrak & Ketentuan</h4>
+          </div>
+          
+          <div className="mb-4 bg-white/5 p-4 rounded-xl border border-white/10 flex flex-col items-center gap-1 text-center">
+             <span className="text-[8px] tracking-[0.4em] font-black opacity-30 uppercase">Contract Serial Code</span>
+             <span className="text-[13px] font-mono tracking-[0.1em] text-emerald-400 font-bold">{serialCode}</span>
           </div>
 
-          {/* Footer Footer Notes */}
-          <div className="mt-10 bg-[#0f172a] p-8 text-white rounded-xl border border-white/5">
-            <div className="flex items-center justify-center gap-8 mb-4">
-              <div className="h-[1px] w-32 bg-slate-700"></div>
-              <h4 className="text-[14px] font-black tracking-[0.5em] text-slate-400 uppercase">CATATAN PENTING</h4>
-              <div className="h-[1px] w-32 bg-slate-700"></div>
-            </div>
-            <p className="text-[12px] leading-relaxed font-black uppercase text-slate-200 text-center tracking-wide">
-              PEMILIK AKUN HANYA PERLU ONLINE DAN MELAKUKAN LIKE PADA POST KOLEKSI ARMANI DI DALAM AKUN BISNIS. SISTEM AKAN MELAKUKAN TUGAS SECARA OTOMATIS. JIKA TUGAS BELUM SELESAI PENARIKAN SALDO BELUM DAPAT DILAKUKAN. KETENTUAN INI BERLAKU MUTLAK DAN TIDAK DAPAT DIGANGGU GUGAT OLEH PIHAK MANAPUN!
-            </p>
+          <div className="space-y-3.5 text-[10px] font-medium leading-relaxed text-justify opacity-80 overflow-y-auto pr-1 custom-scrollbar max-h-[420px]">
+            {[
+              "Detail tugas akan diberikan langsung kepada Anda setelah Anda mengaktifkan tugas. Hindari aktivitas ilegal seperti penarikan dana yang tidak sesuai instruksi.",
+              "Keuntungan yang diperoleh Anggota ditentukan berdasarkan pemilihan dari Koleksi Produk Giorgio Armani.",
+              "Setiap tugas akan ada perubahan jumlah harga dan paket untuk meningkatkan Rating Produk serta visitor Website Giorgio Armani.",
+              "Penarikan dana membutuhkan waktu sekitar 3-5 menit hingga dana masuk ke rekening yang terdaftar pada akun bisnis.",
+              "Dalam setiap tugas, pemilik akun perlu menyelesaikan tugas sesuai dengan rincian yang sudah dikonfirmasi.",
+              "Setiap Advisor mengirimkan Detail Tugas, Pemilik akun wajib memahami instruksi untuk prosedur penarikan dana.",
+              "Detail Tugas yang sudah Dikonfirmasi tidak dapat dibatalkan dengan alasan apapun.",
+              "Setiap Pemilik akun dapat menyelesaikan maksimal 5 kali tugas dalam periode satu hari kerja."
+            ].map((text, i) => (
+              <div key={i} className="flex gap-3">
+                <span className="font-bold text-white/30 shrink-0 text-[10px]">{i+1}.</span>
+                <p>{text}</p>
+              </div>
+            ))}
           </div>
 
+          <div className="mt-auto pt-6 flex justify-center no-print">
+            <button 
+              onClick={() => window.print()}
+              className="bg-white/10 hover:bg-white/20 text-white px-10 py-2.5 rounded-full font-bold uppercase text-[9px] tracking-[0.3em] transition-all border border-white/10 shadow-lg"
+            >
+              Cetak Dokumen
+            </button>
+          </div>
         </div>
       </div>
+
     </div>
   );
 };

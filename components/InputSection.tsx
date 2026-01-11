@@ -8,8 +8,10 @@ interface InputSectionProps {
 
 const InputSection: React.FC<InputSectionProps> = ({ onGenerate }) => {
   const [phone, setPhone] = useState('');
-  const [order, setOrder] = useState('1 pesanan 1 produk');
+  const [order, setOrder] = useState('1 Pesanan 1 Produk');
   const [price, setPrice] = useState('');
+  const [taskNum, setTaskNum] = useState(1);
+  const [commission, setCommission] = useState(20);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,66 +19,96 @@ const InputSection: React.FC<InputSectionProps> = ({ onGenerate }) => {
     onGenerate({
       phoneNumber: phone,
       orderType: order,
-      productPrice: parseFloat(price)
+      productPrice: parseFloat(price),
+      taskNumber: taskNum,
+      commissionRate: commission
     });
   };
 
+  const orderOptions = [
+    "1 Pesanan 1 Produk",
+    "2 Pesanan 2 Produk",
+    "3 Pesanan 3 Produk",
+    "4 Pesanan 4 Produk",
+    "5 Pesanan 5 Produk"
+  ];
+
   return (
-    <div className="max-w-5xl mx-auto mt-12 p-10 bg-white border armani-border shadow-sm no-print">
-      <div className="text-center mb-10">
-        <h2 className="armani-font text-3xl font-light tracking-tight mb-2">PENGINPUTAN DATA</h2>
-        <div className="w-12 h-[1px] bg-black mx-auto"></div>
+    <div className="w-full max-w-4xl mx-auto p-8 bg-[#0f0f0f] border border-white/5 rounded-[32px] mb-10 no-print">
+      <div className="flex flex-col items-center mb-6">
+        <h2 className="armani-font text-2xl font-bold tracking-widest text-white">GENERATOR TUGAS</h2>
+        <div className="w-12 h-[2px] bg-red-600 mt-2"></div>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="group">
-          <label className="block text-[10px] text-gray-400 mb-2 uppercase tracking-[0.2em] font-bold">Nomor Telepon</label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="08..."
-            className="w-full bg-transparent border-b armani-border py-2 text-gray-800 focus:outline-none focus:border-black transition-all placeholder:text-gray-200"
-          />
-        </div>
-        <div>
-          <label className="block text-[10px] text-gray-400 mb-2 uppercase tracking-[0.2em] font-bold">Kategori Pesanan</label>
-          <div className="relative">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500 font-bold ml-2">Nomor Telepon</label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Contoh: 0812..."
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-all font-medium"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500 font-bold ml-2">Pesanan</label>
             <select
               value={order}
               onChange={(e) => setOrder(e.target.value)}
-              className="w-full bg-transparent border-b armani-border py-2 text-gray-800 focus:outline-none focus:border-black transition-all appearance-none cursor-pointer"
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-all font-medium appearance-none"
             >
-              <option value="1 pesanan 1 produk">1 pesanan 1 produk</option>
-              <option value="3 pesanan 3 produk">3 pesanan 3 produk</option>
-              <option value="5 pesanan 5 produk">5 pesanan 5 produk</option>
-              <option value="Paket VIP Armani">Paket VIP Armani</option>
+              {orderOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
             </select>
-            <div className="absolute right-0 top-3 pointer-events-none">
-              <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500 font-bold ml-2">Harga Produk</label>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="Masukkan Angka"
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-all font-medium"
+            />
           </div>
         </div>
-        <div>
-          <label className="block text-[10px] text-gray-400 mb-2 uppercase tracking-[0.2em] font-bold">Harga Produk (IDR)</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="Min. 50.000"
-            className="w-full bg-transparent border-b armani-border py-2 text-gray-800 focus:outline-none focus:border-black transition-all placeholder:text-gray-200"
-          />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500 font-bold ml-2">Tugas Ke-</label>
+            <select
+              value={taskNum}
+              onChange={(e) => setTaskNum(parseInt(e.target.value))}
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-all font-medium appearance-none"
+            >
+              {[1, 2, 3, 4, 5].map(n => (
+                <option key={n} value={n}>Tugas Ke-{n}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500 font-bold ml-2">Persen Komisi</label>
+            <select
+              value={commission}
+              onChange={(e) => setCommission(parseInt(e.target.value))}
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-all font-medium appearance-none"
+            >
+              {[20, 30, 40, 50].map(c => (
+                <option key={c} value={c}>{c}%</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="md:col-span-3 pt-4">
-          <button
-            type="submit"
-            className="w-full armani-bg-deep text-white font-light py-4 tracking-[0.3em] text-xs hover:bg-black transition-all uppercase"
-          >
-            Generate Document
-          </button>
-        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-white text-black font-black py-4 rounded-2xl hover:bg-slate-200 transition-all uppercase tracking-[0.3em] text-[12px] mt-4 shadow-lg shadow-white/5"
+        >
+          Buat Tugas Baru
+        </button>
       </form>
     </div>
   );
