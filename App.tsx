@@ -8,7 +8,7 @@ const App: React.FC = () => {
   const [generatedTask, setGeneratedTask] = useState<GeneratedTask | null>(null);
 
   const handleGenerate = (data: TaskData) => {
-    const profit = Math.round(data.productPrice * 0.25); // Armani premium 25%
+    const profit = Math.round(data.productPrice * 0.25);
     const now = new Date();
     
     const newTask: GeneratedTask = {
@@ -26,7 +26,7 @@ const App: React.FC = () => {
       const resultArea = document.getElementById('result-area');
       if (resultArea) {
         window.scrollTo({
-          top: resultArea.offsetTop,
+          top: resultArea.offsetTop - 50,
           behavior: 'smooth'
         });
       }
@@ -34,22 +34,19 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-10 selection:bg-gray-200">
-      {/* Armani Navbar Simplified */}
-      <nav className="bg-white py-12 px-10 flex flex-col items-center justify-center no-print border-b armani-border">
-        <div className="armani-font text-5xl md:text-6xl tracking-[-0.05em] font-light">GIORGIO ARMANI</div>
-      </nav>
+    <div className="min-h-screen pb-10">
+      <main className="max-w-7xl mx-auto">
+        <div className="no-print">
+          <InputSection onGenerate={handleGenerate} />
+        </div>
 
-      <main className="px-4 max-w-7xl mx-auto">
-        <InputSection onGenerate={handleGenerate} />
-
-        <div id="result-area">
+        <div id="result-area" className="flex justify-center mt-4">
           {generatedTask ? (
             <TaskDetail task={generatedTask} />
           ) : (
             <div className="mt-32 text-center no-print">
-              <div className="armani-font text-4xl font-light italic text-gray-300 mb-4 italic">Timeless Excellence</div>
-              <p className="text-[10px] tracking-[0.5em] uppercase text-gray-400">Please enter credentials to continue</p>
+              <div className="armani-font text-5xl font-light text-slate-400 mb-4">Giorgio Armani</div>
+              <p className="text-[10px] tracking-[0.5em] uppercase text-slate-500">Excellence and Quality</p>
             </div>
           )}
         </div>
