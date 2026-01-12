@@ -22,7 +22,6 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
     year: 'numeric'
   });
 
-  // Helper to convert number string to Indonesian words for uniform detail text
   const numberToWords = (orderString: string) => {
     const firstChar = orderString.trim().charAt(0);
     const map: { [key: string]: string } = {
@@ -33,33 +32,86 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
       '5': 'LIMA'
     };
     const word = map[firstChar] || 'SATU';
-    // Update: Changing the order as requested
     return `${word} PRODUK UNTUK ${word} PESANAN.`;
   };
 
   const taskDetailText = numberToWords(task.orderType);
 
+  // Wide Barcode SVG for the bottom center
+  const WideBarcode = () => (
+    <svg width="400" height="60" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg" className="opacity-90">
+      <rect x="0" y="0" width="3" height="60" fill="black" />
+      <rect x="6" y="0" width="1" height="60" fill="black" />
+      <rect x="10" y="0" width="4" height="60" fill="black" />
+      <rect x="18" y="0" width="2" height="60" fill="black" />
+      <rect x="24" y="0" width="1" height="60" fill="black" />
+      <rect x="30" y="0" width="5" height="60" fill="black" />
+      <rect x="40" y="0" width="2" height="60" fill="black" />
+      <rect x="48" y="0" width="3" height="60" fill="black" />
+      <rect x="56" y="0" width="1" height="60" fill="black" />
+      <rect x="62" y="0" width="4" height="60" fill="black" />
+      <rect x="72" y="0" width="2" height="60" fill="black" />
+      <rect x="80" y="0" width="1" height="60" fill="black" />
+      <rect x="86" y="0" width="5" height="60" fill="black" />
+      <rect x="96" y="0" width="2" height="60" fill="black" />
+      <rect x="104" y="0" width="3" height="60" fill="black" />
+      <rect x="112" y="0" width="1" height="60" fill="black" />
+      <rect x="118" y="0" width="4" height="60" fill="black" />
+      <rect x="128" y="0" width="2" height="60" fill="black" />
+      <rect x="136" y="0" width="1" height="60" fill="black" />
+      <rect x="142" y="0" width="5" height="60" fill="black" />
+      <rect x="152" y="0" width="2" height="60" fill="black" />
+      <rect x="160" y="0" width="3" height="60" fill="black" />
+      <rect x="168" y="0" width="1" height="60" fill="black" />
+      <rect x="174" y="0" width="4" height="60" fill="black" />
+      <rect x="184" y="0" width="2" height="60" fill="black" />
+      <rect x="192" y="0" width="1" height="60" fill="black" />
+      <rect x="198" y="0" width="5" height="60" fill="black" />
+      <rect x="208" y="0" width="2" height="60" fill="black" />
+      <rect x="216" y="0" width="3" height="60" fill="black" />
+      <rect x="224" y="0" width="1" height="60" fill="black" />
+      <rect x="230" y="0" width="4" height="60" fill="black" />
+      <rect x="240" y="0" width="2" height="60" fill="black" />
+      <rect x="248" y="0" width="1" height="60" fill="black" />
+      <rect x="254" y="0" width="5" height="60" fill="black" />
+      <rect x="264" y="0" width="2" height="60" fill="black" />
+      <rect x="272" y="0" width="3" height="60" fill="black" />
+      <rect x="280" y="0" width="1" height="60" fill="black" />
+      <rect x="286" y="0" width="4" height="60" fill="black" />
+      <rect x="296" y="0" width="2" height="60" fill="black" />
+      <rect x="304" y="0" width="1" height="60" fill="black" />
+      <rect x="310" y="0" width="5" height="60" fill="black" />
+      <rect x="320" y="0" width="2" height="60" fill="black" />
+      <rect x="328" y="0" width="3" height="60" fill="black" />
+      <rect x="336" y="0" width="1" height="60" fill="black" />
+      <rect x="342" y="0" width="4" height="60" fill="black" />
+      <rect x="352" y="0" width="2" height="60" fill="black" />
+      <rect x="360" y="0" width="1" height="60" fill="black" />
+      <rect x="366" y="0" width="5" height="60" fill="black" />
+      <rect x="376" y="0" width="2" height="60" fill="black" />
+      <rect x="384" y="0" width="3" height="60" fill="black" />
+      <rect x="392" y="0" width="1" height="60" fill="black" />
+      <rect x="397" y="0" width="3" height="60" fill="black" />
+    </svg>
+  );
+
   return (
     <div className="w-full max-w-[1000px] bg-white text-black p-16 shadow-2xl mt-12 border border-gray-200 relative overflow-hidden font-serif print:mt-0 print:shadow-none print:border-none">
-      {/* Background Seal */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
         <h1 className="text-[300px] font-bold">GA</h1>
       </div>
 
       <div className="relative z-10">
-        {/* Header */}
         <div className="border-b-2 border-black pb-8 mb-10 text-center">
           <h1 className="armani-font text-4xl tracking-[0.3em] font-light uppercase mb-2">GIORGIO ARMANI</h1>
           <p className="text-[10px] tracking-[0.4em] font-bold uppercase opacity-60">Sistem Verifikasi Tugas Internal Milano</p>
         </div>
 
-        {/* Title */}
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold uppercase tracking-widest underline decoration-1 underline-offset-8">SURAT PERNYATAAN KONFIRMASI</h2>
           <p className="text-[11px] mt-4 font-sans font-bold text-gray-400">NOMOR REFERENSI: {task.id}</p>
         </div>
 
-        {/* Content */}
         <div className="space-y-6 text-[14px] leading-relaxed text-justify font-sans">
           <p>Dengan ini, sistem <strong>Giorgio Armani S.p.A</strong> menyatakan bahwa pemilik akun bisnis dengan identitas di bawah ini telah secara resmi mengonfirmasi penerimaan tugas operasional:</p>
           
@@ -84,24 +136,23 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
           <p>Saldo dan komisi sebesar <strong>{task.commissionRate}%</strong> akan secara otomatis dicairkan ke rekening terdaftar setelah pemilik akun menyelesaikan tanggung jawab pekerjaan sesuai ketentuan yang berlaku pada Kontrak Kerja Sama Digital.</p>
         </div>
 
-        {/* Signatures */}
-        <div className="mt-20 flex justify-between items-end px-10">
-          <div className="text-center">
-            <p className="text-[12px] font-bold mb-16 uppercase">Sistem Otomatis GA</p>
-            <div className="w-40 h-[1px] bg-black mx-auto"></div>
-            <p className="text-[10px] mt-2 font-bold opacity-40">Verifikasi Digital</p>
-          </div>
-          
-          <div className="text-center">
+        {/* Updated Footer with Center Barcode */}
+        <div className="mt-20 flex flex-col items-center">
+          <div className="text-center mb-8">
             <p className="text-[12px] font-bold mb-2">{today}</p>
-            <p className="text-[12px] font-bold mb-16 uppercase">Pemilik Akun</p>
-            <div className="w-40 h-[1px] bg-black mx-auto"></div>
-            <p className="text-[10px] mt-2 font-bold opacity-40">Tanda Tangan Konfirmasi</p>
+            <p className="text-[10px] font-bold uppercase opacity-40 tracking-[0.3em]">Tanggal Pengesahan Digital</p>
+          </div>
+
+          <div className="flex flex-col items-center gap-2">
+            <WideBarcode />
+            <div className="flex flex-col items-center mt-1">
+              <span className="text-[11px] font-mono font-bold tracking-[0.5em] text-black/80">{serialCode}</span>
+              <span className="text-[8px] font-bold uppercase opacity-30 tracking-[0.6em] mt-1">Digital Security Verification Code</span>
+            </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-24 pt-8 border-t border-gray-100 text-[9px] text-center font-sans font-bold opacity-30 tracking-widest uppercase italic">
+        <div className="mt-16 pt-8 border-t border-gray-100 text-[9px] text-center font-sans font-bold opacity-30 tracking-widest uppercase italic">
           Dokumen ini dihasilkan secara otomatis oleh Giorgio Armani Authentication Ledger dan bersifat sah secara digital.
         </div>
       </div>
@@ -109,7 +160,7 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
       <div className="mt-10 flex justify-center no-print">
         <button 
           onClick={() => window.print()}
-          className="bg-black text-white px-8 py-3 rounded-full font-bold uppercase text-[11px] tracking-widest hover:bg-gray-800 transition-all"
+          className="bg-black text-white px-10 py-3 rounded-full font-bold uppercase text-[11px] tracking-widest hover:bg-gray-800 transition-all shadow-xl"
         >
           Cetak Surat Pernyataan
         </button>
