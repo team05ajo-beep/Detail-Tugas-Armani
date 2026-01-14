@@ -8,13 +8,12 @@ const App: React.FC = () => {
   const [generatedTask, setGeneratedTask] = useState<GeneratedTask | null>(null);
 
   const handleGenerate = (data: TaskData) => {
-    // Dynamic profit calculation based on user selection
     const profitMultiplier = data.commissionRate / 100;
     const profit = Math.round(data.productPrice * profitMultiplier);
     
     const newTask: GeneratedTask = {
       ...data,
-      id: "GA-AUTH-" + Math.random().toString(36).substring(2, 7).toUpperCase() + "-025",
+      id: "GUCCI-AUTH-" + Math.random().toString(36).substring(2, 7).toUpperCase() + "-025",
       commission: `${data.commissionRate}% Fixed`,
       profit: profit,
     };
@@ -27,7 +26,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white pb-32 selection:bg-white selection:text-black">
-      {/* BACKGROUND ELEMENTS */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none no-print">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[150px] animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-white/5 rounded-full blur-[120px]"></div>
@@ -40,7 +38,7 @@ const App: React.FC = () => {
           <span className="text-[9px] tracking-[1em] font-black uppercase">Internal System</span>
           <div className="h-px w-8 bg-white"></div>
         </div>
-        <h1 className="armani-font text-5xl font-light tracking-[0.4em] mb-2 uppercase text-center">GIORGIO ARMANI</h1>
+        <h1 className="armani-font text-6xl font-light tracking-[0.5em] mb-2 uppercase text-center">GUCCI</h1>
         <p className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase">Authentication & Workflow Ledger</p>
       </header>
 
@@ -54,14 +52,13 @@ const App: React.FC = () => {
             <TaskDetail task={generatedTask} />
           ) : (
             <div className="py-48 text-center opacity-5 select-none transition-all hover:opacity-10 duration-1000">
-              <div className="armani-font text-[180px] leading-none font-light tracking-tighter">GA</div>
-              <div className="text-[12px] tracking-[4em] font-black mt-[-20px] ml-[4em]">MILANO</div>
+              <div className="armani-font text-[180px] leading-none font-light tracking-tighter">GG</div>
+              <div className="text-[12px] tracking-[4em] font-black mt-[-20px] ml-[4em]">FLORENCE</div>
             </div>
           )}
         </div>
       </main>
 
-      {/* FIXED SYSTEM STATUS */}
       <div className="fixed bottom-6 left-6 flex items-center gap-3 no-print z-50">
         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
         <span className="text-[8px] font-black tracking-widest text-white/40 uppercase">System Latency: 12ms</span>

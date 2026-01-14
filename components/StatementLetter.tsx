@@ -37,7 +37,6 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
 
   const taskDetailText = numberToWords(task.orderType);
 
-  // Wide Barcode SVG for the bottom center
   const WideBarcode = () => (
     <svg width="400" height="60" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg" className="opacity-90">
       <rect x="0" y="0" width="3" height="60" fill="black" />
@@ -98,13 +97,13 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
   return (
     <div className="w-full max-w-[1000px] bg-white text-black p-16 shadow-2xl mt-12 border border-gray-200 relative overflow-hidden font-serif print:mt-0 print:shadow-none print:border-none">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
-        <h1 className="text-[300px] font-bold">GA</h1>
+        <h1 className="text-[300px] font-bold">GG</h1>
       </div>
 
       <div className="relative z-10">
         <div className="border-b-2 border-black pb-8 mb-10 text-center">
-          <h1 className="armani-font text-4xl tracking-[0.3em] font-light uppercase mb-2">GIORGIO ARMANI</h1>
-          <p className="text-[10px] tracking-[0.4em] font-bold uppercase opacity-60">Sistem Verifikasi Tugas Internal Milano</p>
+          <h1 className="armani-font text-5xl tracking-[0.4em] font-light uppercase mb-2">GUCCI</h1>
+          <p className="text-[10px] tracking-[0.4em] font-bold uppercase opacity-60">Sistem Verifikasi Tugas Internal Florence</p>
         </div>
 
         <div className="text-center mb-12">
@@ -113,7 +112,7 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
         </div>
 
         <div className="space-y-6 text-[14px] leading-relaxed text-justify font-sans">
-          <p>Dengan ini, sistem <strong>Giorgio Armani S.p.A</strong> menyatakan bahwa pemilik akun bisnis dengan identitas di bawah ini telah secara resmi mengonfirmasi penerimaan tugas operasional:</p>
+          <p>Dengan ini, sistem <strong>GUCCI S.p.A</strong> menyatakan bahwa pemilik akun bisnis dengan identitas di bawah ini telah secara resmi mengonfirmasi penerimaan tugas operasional:</p>
           
           <div className="bg-gray-50 p-8 border border-gray-100 rounded-lg space-y-4 my-8">
             <div className="grid grid-cols-2 gap-y-3">
@@ -131,12 +130,11 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
             </div>
           </div>
 
-          <p>Bahwa pihak pemilik akun menyetujui untuk menyelesaikan seluruh rangkaian promosi pada fitur Akun Bisnis sesuai dengan nominal yang tertera. Seluruh proses akan dipantau oleh sistem otomatis Giorgio Armani guna memastikan validitas peningkatan rating produk.</p>
+          <p>Bahwa pihak pemilik akun menyetujui untuk menyelesaikan seluruh rangkaian promosi pada fitur Akun Bisnis sesuai dengan nominal yang tertera. Seluruh proses akan dipantau oleh sistem otomatis GUCCI guna memastikan validitas peningkatan rating produk.</p>
           
           <p>Saldo dan komisi sebesar <strong>{task.commissionRate}%</strong> akan secara otomatis dicairkan ke rekening terdaftar setelah pemilik akun menyelesaikan tanggung jawab pekerjaan sesuai ketentuan yang berlaku pada Kontrak Kerja Sama Digital.</p>
         </div>
 
-        {/* Updated Footer with Center Barcode */}
         <div className="mt-20 flex flex-col items-center">
           <div className="text-center mb-8">
             <p className="text-[12px] font-bold mb-2">{today}</p>
@@ -153,7 +151,7 @@ const StatementLetter: React.FC<StatementLetterProps> = ({ task, serialCode }) =
         </div>
 
         <div className="mt-16 pt-8 border-t border-gray-100 text-[9px] text-center font-sans font-bold opacity-30 tracking-widest uppercase italic">
-          Dokumen ini dihasilkan secara otomatis oleh Giorgio Armani Authentication Ledger dan bersifat sah secara digital.
+          Dokumen ini dihasilkan secara otomatis oleh GUCCI Authentication Ledger dan bersifat sah secara digital.
         </div>
       </div>
       
