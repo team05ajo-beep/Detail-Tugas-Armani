@@ -94,6 +94,24 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
 
         <div className="bg-[#c2c2c2] p-10 grid grid-cols-12 gap-8 relative monogram-bg min-h-[600px]">
           <div className="col-span-8 flex flex-col gap-6">
+            
+            {/* Mentor Profile Header */}
+            <div className="flex items-center justify-between bg-white/50 backdrop-blur-sm p-4 rounded-3xl border border-white/40 shadow-sm">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full border-2 border-emerald-500 p-0.5 overflow-hidden">
+                  <img src={task.mentorImage} className="w-full h-full rounded-full object-cover" alt="Advisor" />
+                </div>
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-700">Official Advisor</p>
+                  <p className="font-bold text-lg tracking-tight uppercase armani-font">{task.mentorName}</p>
+                </div>
+              </div>
+              <div className="bg-emerald-500/10 px-4 py-1.5 rounded-full border border-emerald-500/20 flex items-center gap-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-bold text-emerald-800 tracking-widest uppercase italic">Active Mentor</span>
+              </div>
+            </div>
+
             <div className="flex justify-between px-6 py-3 bg-white/30 backdrop-blur-sm rounded-full border border-white/20">
               {['Satu', 'Dua', 'Tiga', 'Empat', 'Lima'].map((t, i) => {
                 const currentIdx = i + 1;
